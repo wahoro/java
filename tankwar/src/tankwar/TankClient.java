@@ -1,0 +1,109 @@
+package tankwar;
+
+import java.awt.Color;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class TankClient extends Frame {
+	public static final int GAME_WIDTH = 800;
+	public static final int GAME_HEIGTH = 600;
+
+	Image offscreen = null;
+	
+	Tank myTank = new Tank(50, 50, true, this);
+	Tank enemyTank = new Tank(100, 100, false, this);
+	List<Missile> missiles = new ArrayList<Missile>();
+	
+	public void paint(Graphics g) {
+		Color c = g.getColor();
+		g.setColor(Color.BLACK);
+		g.drawString("missiled count: " + missiles.size(), 10, 50);
+		g.setColor(c);
+		
+		for (int i = 0; i < missiles.size(); i++) {
+			Missile m = missiles.get(i);
+			if (!m.isLive()) {
+				missiles.remove(m);
+			} else {
+				m.hitTank(enemyTank);
+				m.draw(g);
+			}
+		}
+		
+		myTank.draw(g);
+		enemyTank.draw(g);
+	}
+	
+	public void update(Graphics g) {
+		if (offscreen == null) {
+			offscreen = this.createImage(GAME_WIDTH, GAME_HEIGTH);
+		}
+		Graphics gOffScreen = offscreen.getGraphics();
+	    Color c = gOffScreen.getColor();
+	    gOffScreen.setColor(Color.WHITE);
+	    gOffScreen.fillRect(0, 0, GAME_WIDTH, GAME_HEIGTH);
+	    g.setColor(c);
+		paint(gOffScreen);
+		g.drawImage(offscreen, 0, 0, null);
+	}
+
+	private static final long serialVersionUID = 1L;
+
+	public void LanchFrame() {
+		this.setLocation(400, 300);
+		this.setSize(GAME_WIDTH, GAME_HEIGTH);
+		this.setResizable(false);
+		this.setTitle("tank war");
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
+			}
+		});
+		setVisible(true);
+
+		this.addKeyListener(new KeyMonitor());
+		new Thread(new PaintThread()).start();
+	}
+
+	public static void main(String[] args) {
+		TankClient tc = new TankClient();
+		tc.LanchFrame();
+	}
+
+	// ÖØ»­´°¿Ú
+	private class PaintThread implements Runnable {
+		public void run() {
+			while (true) {
+				repaint();
+				try {
+					Thread.sleep(5);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+
+			}
+		}
+	}
+	
+	//¼àÌý¼üÅÌ°´¼ü
+	private class KeyMonitor extends KeyAdapter {
+
+		public void keyReleased(KeyEvent e) {
+			myTank.KeyReleased(e);
+		}
+
+		public void keyPressed(KeyEvent e) {
+			myTank.KeyPressed(e);
+		}
+		
+	}
+}

@@ -1,0 +1,90 @@
+package tankwar;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
+
+public class Missile {
+	public Missile(int x, int y, Tank.Direction dir) {
+		this.x = x;
+		this.y = y;
+		this.dir = dir;
+	}
+
+	public void draw(Graphics g) {		
+		Color c = g.getColor();
+		g.setColor(Color.BLACK);
+		g.fillOval(x, y, WIDTH, HEIGHT);
+		g.setColor(c);
+
+		move();
+	}
+
+	private void move() {
+		switch (dir) {
+		case LEFT:
+			x -= XSPEED;
+			break;
+		case RIGHT:
+			x += XSPEED;
+			break;
+		case UP:
+			y -= YSPEED;
+			break;
+		case DOWN:
+			y += YSPEED;
+			break;
+		case LEFTUP:
+			x -= XSPEED;
+			y -= YSPEED;
+			break;
+		case LEFTDOWN:
+			x -= XSPEED;
+			y += YSPEED;
+			break;
+		case RIGHTUP:
+			x += XSPEED;
+			y -= YSPEED;
+			break;
+		case RIGHTDOWN:
+			x += XSPEED;
+			y += YSPEED;
+			break;
+		case STOP:
+			break;
+		}
+
+		if (x < 0 || y < 0 || x > TankClient.GAME_WIDTH || y > TankClient.GAME_HEIGTH) {
+			isLive = false;
+		}
+	}
+	
+	public boolean hitTank(Tank t) {
+		if (this.getRect().intersects(t.getRect()) && t.isLive()) {
+			t.setLive(false);
+			this.isLive = false;
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public Rectangle getRect() {
+		return new Rectangle(x, y, WIDTH, HEIGHT);
+	}
+
+	private int x;
+	private int y;
+	private boolean isLive = true;
+
+	public boolean isLive() {
+		return isLive;
+	}
+
+	public static final int WIDTH = 10;
+	public static final int HEIGHT = 10;
+	public static final int XSPEED = 5;
+	public static final int YSPEED = 5;
+
+	private Tank.Direction dir;
+}
