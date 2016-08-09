@@ -34,6 +34,12 @@ public class TankClient extends Frame {
 		g.drawString("tank count: " + tanks.size(), 10, 70);
 		g.setColor(c);
 		
+		if (tanks.size() == 0) {
+			for (int i = 0; i < 10; i++) {
+				tanks.add(new Tank(50 + 40 * (i + 1), 50, false, Direction.DOWN, this));
+			}
+		}
+		
 		wall.draw(g);
 
 		// »­±¬Õ¨Ð§¹û
@@ -66,11 +72,13 @@ public class TankClient extends Frame {
 				tanks.remove(t);
 			} else {
 				t.hitWall(wall);
+				t.collidesTanks(tanks);
 				t.draw(g);
 			}
 		}
 
 		myTank.hitWall(wall);
+		myTank.collidesTanks(tanks);
 		myTank.draw(g);
 	}
 
@@ -132,7 +140,7 @@ public class TankClient extends Frame {
 	// ¼àÌý¼üÅÌ°´¼ü
 	private class KeyMonitor extends KeyAdapter {
 
-		public void keyReleased(KeyEvent e) {
+		public void keyReleased(KeyEvent e) {			
 			myTank.KeyReleased(e);
 		}
 

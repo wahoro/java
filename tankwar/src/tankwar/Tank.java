@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
+import java.util.List;
 import java.util.Random;
 
 public class Tank {
@@ -90,6 +91,12 @@ public class Tank {
 		case KeyEvent.VK_X:
 			fire();
 			break;
+		case KeyEvent.VK_C:
+			fireAll();
+			break;
+		case KeyEvent.VK_Z:
+			isLive = true;
+			break;
 		}
 		locationDirection();
 	}
@@ -171,6 +178,17 @@ public class Tank {
 		tc.missiles.add(m);
 	}
 	
+	private void fireAll() {
+		if (!isLive) return;
+		int mx = x + Tank.WIDTH / 2 - Missile.WIDTH /2;
+		int my = y + Tank.HEIGHT / 2 - Missile.HEIGHT /2;
+		Direction[] dirs = Direction.values();
+		for (int i=0; i<dirs.length - 1; i++) {
+			Missile m = new Missile(mx, my, isGood, dirs[i], tc);
+			tc.missiles.add(m);
+		}
+	}
+	
 	private void locationDirection() {
 		if (!isLeft && isRight && !isUp && !isDown) {dir = Direction.RIGHT;}
 		else if (isLeft && !isRight && !isUp && !isDown) {dir = Direction.LEFT;}
@@ -206,11 +224,29 @@ public class Tank {
 		return new Rectangle(x, y, WIDTH, HEIGHT);
 	}
 	
+	public void stay() {
+		this.x = oldx;
+		this.y = oldy;
+	}
+	
+	//记录上一个位置如果撞墙后将坦克坐标还原为上一次的位置
+	//如何设置成stop的话，会导致坦克粘到墙上
 	public void hitWall(Wall w) {
 		if (this.isLive && this.getRect().intersects(w.getRect())) {
-			this.x = oldx;
-			this.y = oldy;
+			stay();
 		}
+	}
+	
+	public void collidesTanks(List<Tank> tanks) {
+		for (int i=0; i<tanks.size(); i++) {
+			Tank t = tanks.get(i);
+			
+			if (t != this && this.isLive && t.isLive() && this.getRect().intersects(t.getRect())) {
+				stay();
+				t.stay();
+			}
+		}
+
 	}
 	
 	private int step = r.nextInt(TOTALSTEP) + 3;
