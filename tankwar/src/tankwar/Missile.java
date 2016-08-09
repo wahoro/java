@@ -6,9 +6,10 @@ import java.awt.Rectangle;
 import java.util.List;
 
 public class Missile {
-	public Missile(int x, int y, Tank.Direction dir, TankClient tc) {
+	public Missile(int x, int y, boolean isGood, Tank.Direction dir, TankClient tc) {
 		this.x = x;
 		this.y = y;
+		this.isGood = isGood;
 		this.dir = dir;
 		this.tc = tc;
 	}
@@ -62,7 +63,7 @@ public class Missile {
 	}
 	
 	public boolean hitTank(Tank t) {
-		if (this.getRect().intersects(t.getRect()) && t.isLive()) {
+		if (this.isLive && this.getRect().intersects(t.getRect()) && t.isLive() && this.isGood != t.isGood()) {
 			t.setLive(false);
 			this.isLive = false;
 			Explode e = new Explode(x, y, tc);
@@ -90,6 +91,7 @@ public class Missile {
 	private int y;
 	private TankClient tc;
 	private boolean isLive = true;
+	private boolean isGood;
 
 	public boolean isLive() {
 		return isLive;

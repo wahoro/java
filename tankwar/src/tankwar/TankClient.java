@@ -50,6 +50,7 @@ public class TankClient extends Frame {
 				missiles.remove(m);
 			} else {
 				m.hitTanks(tanks);
+				m.hitTank(myTank);
 				m.draw(g);
 			}
 		}

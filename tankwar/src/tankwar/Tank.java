@@ -88,7 +88,7 @@ public class Tank {
 			isDown = false;
 			break;
 		case KeyEvent.VK_X:
-			tc.missiles.add(fire());
+			fire();
 			break;
 		}
 		locationDirection();
@@ -153,14 +153,20 @@ public class Tank {
 			}
 
 			step--;
+			
+			if (r.nextInt(500) > 490) {
+				this.fire();
+			}
 		}
+		
 	}
 	
-	private Missile fire() {
+	private void fire() {
+		if (!isLive) return;
 		int mx = x + Tank.WIDTH / 2 - Missile.WIDTH /2;
 		int my = y + Tank.HEIGHT / 2 - Missile.HEIGHT /2;
-		Missile m = new Missile(mx, my, ptdir, tc);
-		return m;
+		Missile m = new Missile(mx, my, isGood, ptdir, tc);
+		tc.missiles.add(m);
 	}
 	
 	private void locationDirection() {
