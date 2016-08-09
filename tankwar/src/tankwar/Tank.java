@@ -145,8 +145,14 @@ public class Tank {
 		//敌军坦克随机改变方向
 		if (!isGood) {
 			Direction[] dirs = Direction.values();
-			int rn = r.nextInt(dirs.length);
-			this.dir = dirs[rn];
+
+			if (step == 0) {
+				step = r.nextInt(TOTALSTEP) + 3;
+				int rn = r.nextInt(dirs.length);
+				this.dir = dirs[rn];
+			}
+
+			step--;
 		}
 	}
 	
@@ -189,6 +195,9 @@ public class Tank {
 	public Rectangle getRect() {
 		return new Rectangle(x, y, WIDTH, HEIGHT);
 	}
+	
+	private int step = r.nextInt(TOTALSTEP) + 3;
+	public static final int TOTALSTEP = 20;
 	
 	private static Random r = new Random();
 	
