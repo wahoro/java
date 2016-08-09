@@ -210,7 +210,4 @@ public class Tank {
 		this.isLive = isLive;
 	}
 	
-	
-	
-	
 }
