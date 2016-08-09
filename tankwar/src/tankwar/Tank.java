@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
+import java.util.Random;
 
 public class Tank {
 	public void draw(Graphics g) {
@@ -140,6 +141,13 @@ public class Tank {
 			x = TankClient.GAME_WIDTH - Tank.WIDTH;
 		if (y + Tank.HEIGHT > TankClient.GAME_HEIGTH)
 			y = TankClient.GAME_HEIGTH - Tank.HEIGHT;
+		
+		//敌军坦克随机改变方向
+		if (!isGood) {
+			Direction[] dirs = Direction.values();
+			int rn = r.nextInt(dirs.length);
+			this.dir = dirs[rn];
+		}
 	}
 	
 	private Missile fire() {
@@ -172,15 +180,17 @@ public class Tank {
 		this.isGood = isGood;
 	}
 
-	public Tank(int x, int y, boolean isGood, TankClient tc) {
+	public Tank(int x, int y, boolean isGood, Direction dir, TankClient tc) {
 		this(x, y, isGood);
-		
+		this.dir = dir;
 		this.tc = tc;
 	}
 	
 	public Rectangle getRect() {
 		return new Rectangle(x, y, WIDTH, HEIGHT);
 	}
+	
+	private static Random r = new Random();
 	
 	//设置坦克方向
 	enum Direction {LEFT, RIGHT, UP, DOWN, LEFTUP, RIGHTUP, LEFTDOWN, RIGHTDOWN, STOP};
@@ -200,6 +210,10 @@ public class Tank {
 	TankClient tc;
 	private Tank.Direction ptdir = Direction.DOWN;
 	private boolean isGood = false;
+	public boolean isGood() {
+		return isGood;
+	}
+
 	private boolean isLive = true;
 	
 	public boolean isLive() {
