@@ -209,5 +209,8 @@ public class Tank {
 	public void setLive(boolean isLive) {
 		this.isLive = isLive;
 	}
-
+	
+	
+	
+	
 }
