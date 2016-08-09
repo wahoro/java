@@ -5,10 +5,11 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 
 public class Missile {
-	public Missile(int x, int y, Tank.Direction dir) {
+	public Missile(int x, int y, Tank.Direction dir, TankClient tc) {
 		this.x = x;
 		this.y = y;
 		this.dir = dir;
+		this.tc = tc;
 	}
 
 	public void draw(Graphics g) {		
@@ -63,6 +64,8 @@ public class Missile {
 		if (this.getRect().intersects(t.getRect()) && t.isLive()) {
 			t.setLive(false);
 			this.isLive = false;
+			Explode e = new Explode(x, y, tc);
+			tc.explodes.add(e);
 			return true;
 		} else {
 			return false;
@@ -75,6 +78,7 @@ public class Missile {
 
 	private int x;
 	private int y;
+	private TankClient tc;
 	private boolean isLive = true;
 
 	public boolean isLive() {

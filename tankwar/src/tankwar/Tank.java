@@ -145,7 +145,7 @@ public class Tank {
 	private Missile fire() {
 		int mx = x + Tank.WIDTH / 2 - Missile.WIDTH /2;
 		int my = y + Tank.HEIGHT / 2 - Missile.HEIGHT /2;
-		Missile m = new Missile(mx, my, ptdir);
+		Missile m = new Missile(mx, my, ptdir, tc);
 		return m;
 	}
 	

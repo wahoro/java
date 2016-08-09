@@ -30,4 +30,8 @@ public class Explode {
 		g.setColor(c);
 		step++;
 	}
+
+	public boolean isLive() {
+		return isLive;
+	}
 }
