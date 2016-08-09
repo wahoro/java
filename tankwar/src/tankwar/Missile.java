@@ -3,6 +3,7 @@ package tankwar;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.List;
 
 public class Missile {
 	public Missile(int x, int y, Tank.Direction dir, TankClient tc) {
@@ -70,6 +71,15 @@ public class Missile {
 		} else {
 			return false;
 		}
+	}
+	
+	public boolean hitTanks(List<Tank> tanks) {
+		for (int i=0; i<tanks.size(); i++) {
+			if (hitTank(tanks.get(i))) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public Rectangle getRect() {

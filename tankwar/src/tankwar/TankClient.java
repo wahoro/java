@@ -20,15 +20,17 @@ public class TankClient extends Frame {
 	Image offscreen = null;
 	
 	Tank myTank = new Tank(50, 50, true, this);
-	Tank enemyTank = new Tank(100, 100, false, this);
 	List<Missile> missiles = new ArrayList<Missile>();
 	List<Explode> explodes = new ArrayList<Explode>();
+	List<Tank> tanks = new ArrayList<Tank>();
+
 	
 	public void paint(Graphics g) {
 		Color c = g.getColor();
 		g.setColor(Color.BLACK);
 		g.drawString("missiled count: " + missiles.size(), 10, 40);
 		g.drawString("explode count: " + explodes.size(), 10, 55);
+		g.drawString("tank count: " + tanks.size(), 10, 70);
 		g.setColor(c);
 		
 		//画爆炸效果
@@ -47,13 +49,22 @@ public class TankClient extends Frame {
 			if (!m.isLive()) {
 				missiles.remove(m);
 			} else {
-				m.hitTank(enemyTank);
+				m.hitTanks(tanks);
 				m.draw(g);
 			}
 		}
 		
+		// 画敌方坦克
+		for (int i = 0; i < tanks.size(); i++) {
+			Tank t = tanks.get(i);
+			if (!t.isLive()) {
+				tanks.remove(t);
+			} else {
+				t.draw(g);
+			}
+		}
+		
 		myTank.draw(g);
-		enemyTank.draw(g);
 	}
 	
 	public void update(Graphics g) {
@@ -72,6 +83,10 @@ public class TankClient extends Frame {
 	private static final long serialVersionUID = 1L;
 
 	public void LanchFrame() {
+		for (int i = 0; i < 10; i++) {
+			tanks.add(new Tank(50 + 40 * (i + 1), 50, false, this));
+		}
+		
 		this.setLocation(400, 300);
 		this.setSize(GAME_WIDTH, GAME_HEIGTH);
 		this.setResizable(false);
