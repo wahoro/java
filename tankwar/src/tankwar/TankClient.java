@@ -22,12 +22,15 @@ public class TankClient extends Frame {
 	Tank myTank = new Tank(50, 50, true, this);
 	Tank enemyTank = new Tank(100, 100, false, this);
 	List<Missile> missiles = new ArrayList<Missile>();
+	Explode epd = new Explode(70, 70, this);
 	
 	public void paint(Graphics g) {
 		Color c = g.getColor();
 		g.setColor(Color.BLACK);
 		g.drawString("missiled count: " + missiles.size(), 10, 50);
 		g.setColor(c);
+		
+		epd.draw(g);
 		
 		for (int i = 0; i < missiles.size(); i++) {
 			Missile m = missiles.get(i);
