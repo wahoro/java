@@ -83,6 +83,14 @@ public class Missile {
 		return false;
 	}
 	
+	public void hitWall(Wall w) {
+		if (this.isLive && this.getRect().intersects(w.getRect())) {
+			this.isLive = false;
+			Explode e = new Explode(x, y, tc);
+			tc.explodes.add(e);
+		}
+	}
+	
 	public Rectangle getRect() {
 		return new Rectangle(x, y, WIDTH, HEIGHT);
 	}

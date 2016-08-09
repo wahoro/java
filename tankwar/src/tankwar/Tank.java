@@ -96,6 +96,8 @@ public class Tank {
 	
 	// Ì¹¿ËÒÆ¶¯µÄÏñËØ
 	private void move() {
+		oldx = x;
+		oldy = y;
 		switch (dir) {
 		case LEFT:
 			x -= XSPEED;
@@ -189,6 +191,8 @@ public class Tank {
 	public Tank(int x, int y, boolean isGood) {
 		this.x = x;
 		this.y = y;
+		this.oldx = x;
+		this.oldy = y;
 		this.isGood = isGood;
 	}
 
@@ -200,6 +204,13 @@ public class Tank {
 	
 	public Rectangle getRect() {
 		return new Rectangle(x, y, WIDTH, HEIGHT);
+	}
+	
+	public void hitWall(Wall w) {
+		if (this.isLive && this.getRect().intersects(w.getRect())) {
+			this.x = oldx;
+			this.y = oldy;
+		}
 	}
 	
 	private int step = r.nextInt(TOTALSTEP) + 3;
@@ -222,6 +233,8 @@ public class Tank {
 	private boolean isDown  = false;
 	int x;
 	int y;
+	int oldx;
+	int oldy;
 	TankClient tc;
 	private Tank.Direction ptdir = Direction.DOWN;
 	private boolean isGood = false;
