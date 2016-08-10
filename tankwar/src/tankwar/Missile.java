@@ -5,13 +5,18 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.List;
 
+/**
+ * ×Óµ¯Àà
+ * @author Mur
+ *
+ */
 public class Missile {
-	public Missile(int x, int y, boolean isGood, Tank.Direction dir, TankClient tc) {
+	public Missile(int x, int y, boolean isGood, Tank.Direction dir, TankClient tankClient) {
 		this.x = x;
 		this.y = y;
 		this.isGood = isGood;
 		this.dir = dir;
-		this.tc = tc;
+		this.tankClient = tankClient;
 	}
 
 	public void draw(Graphics g) {		
@@ -66,8 +71,8 @@ public class Missile {
 		if (this.isLive && this.getRect().intersects(t.getRect()) && t.isLive() && this.isGood != t.isGood()) {
 			t.setLive(false);
 			this.isLive = false;
-			Explode e = new Explode(x, y, tc);
-			tc.explodes.add(e);
+			Explode e = new Explode(x, y, tankClient);
+			tankClient.explodes.add(e);
 			return true;
 		} else {
 			return false;
@@ -86,8 +91,8 @@ public class Missile {
 	public void hitWall(Wall w) {
 		if (this.isLive && this.getRect().intersects(w.getRect())) {
 			this.isLive = false;
-			Explode e = new Explode(x, y, tc);
-			tc.explodes.add(e);
+			Explode e = new Explode(x, y, tankClient);
+			tankClient.explodes.add(e);
 		}
 	}
 	
@@ -95,11 +100,7 @@ public class Missile {
 		return new Rectangle(x, y, WIDTH, HEIGHT);
 	}
 
-	private int x;
-	private int y;
-	private TankClient tc;
-	private boolean isLive = true;
-	private boolean isGood;
+
 
 	public boolean isLive() {
 		return isLive;
@@ -111,4 +112,9 @@ public class Missile {
 	public static final int YSPEED = 5;
 
 	private Tank.Direction dir;
+	private int x;
+	private int y;
+	private TankClient tankClient;
+	private boolean isLive = true;
+	private boolean isGood;
 }

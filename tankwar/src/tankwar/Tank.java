@@ -12,19 +12,22 @@ public class Tank {
 		if (!isLive) {
 			return;
 		}
-		
+
 		Color c = g.getColor();
-		if (isGood) {g.setColor(Color.RED);}
-		else {g.setColor(Color.BLUE);}
+		if (isGood) {
+			g.setColor(Color.RED);
+		} else {
+			g.setColor(Color.BLUE);
+		}
 		g.fillOval(x, y, WIDTH, HEIGHT);
 		g.setColor(c);
-		
+
 		switch (ptdir) {
 		case LEFT:
 			g.drawLine(x + Tank.WIDTH / 2, y + Tank.HEIGHT / 2, x, y + Tank.HEIGHT / 2);
 			break;
 		case RIGHT:
-			g.drawLine(x + Tank.WIDTH / 2, y + Tank.HEIGHT / 2, x + Tank.WIDTH , y + Tank.HEIGHT / 2);
+			g.drawLine(x + Tank.WIDTH / 2, y + Tank.HEIGHT / 2, x + Tank.WIDTH, y + Tank.HEIGHT / 2);
 			break;
 		case UP:
 			g.drawLine(x + Tank.WIDTH / 2, y + Tank.HEIGHT / 2, x + Tank.WIDTH / 2, y);
@@ -47,14 +50,13 @@ public class Tank {
 		case STOP:
 			break;
 		}
-		
+
 		move();
 	}
-	
+
 	public void KeyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
-		switch(key)
-		{
+		switch (key) {
 		case KeyEvent.VK_RIGHT:
 			isRight = true;
 			break;
@@ -68,14 +70,13 @@ public class Tank {
 			isDown = true;
 			break;
 		}
-		
+
 		locationDirection();
 	}
-	
+
 	public void KeyReleased(KeyEvent e) {
 		int key = e.getKeyCode();
-		switch(key)
-		{
+		switch (key) {
 		case KeyEvent.VK_RIGHT:
 			isRight = false;
 			break;
@@ -100,7 +101,7 @@ public class Tank {
 		}
 		locationDirection();
 	}
-	
+
 	// 坦克移动的像素
 	private void move() {
 		oldx = x;
@@ -137,11 +138,11 @@ public class Tank {
 		case STOP:
 			break;
 		}
-		
+
 		if (this.dir != Direction.STOP) {
 			this.ptdir = this.dir;
 		}
-		
+
 		if (x < 0)
 			x = 0;
 		if (y < 30)
@@ -150,8 +151,8 @@ public class Tank {
 			x = TankClient.GAME_WIDTH - Tank.WIDTH;
 		if (y + Tank.HEIGHT > TankClient.GAME_HEIGTH)
 			y = TankClient.GAME_HEIGTH - Tank.HEIGHT;
-		
-		//敌军坦克随机改变方向
+
+		// 敌军坦克随机改变方向
 		if (!isGood) {
 			Direction[] dirs = Direction.values();
 
@@ -162,50 +163,65 @@ public class Tank {
 			}
 
 			step--;
-			
+
 			if (r.nextInt(500) > 490) {
 				this.fire();
 			}
 		}
-		
+
 	}
-	
+
 	private void fire() {
-		if (!isLive) return;
-		int mx = x + Tank.WIDTH / 2 - Missile.WIDTH /2;
-		int my = y + Tank.HEIGHT / 2 - Missile.HEIGHT /2;
+		if (!isLive) {
+			return;
+		}
+
+		int mx = x + Tank.WIDTH / 2 - Missile.WIDTH / 2;
+		int my = y + Tank.HEIGHT / 2 - Missile.HEIGHT / 2;
 		Missile m = new Missile(mx, my, isGood, ptdir, tc);
 		tc.missiles.add(m);
 	}
-	
+
 	private void fireAll() {
-		if (!isLive) return;
-		int mx = x + Tank.WIDTH / 2 - Missile.WIDTH /2;
-		int my = y + Tank.HEIGHT / 2 - Missile.HEIGHT /2;
+		if (!isLive) {
+			return;
+		}
+		int mx = x + Tank.WIDTH / 2 - Missile.WIDTH / 2;
+		int my = y + Tank.HEIGHT / 2 - Missile.HEIGHT / 2;
 		Direction[] dirs = Direction.values();
-		for (int i=0; i<dirs.length - 1; i++) {
+		for (int i = 0; i < dirs.length - 1; i++) {
 			Missile m = new Missile(mx, my, isGood, dirs[i], tc);
 			tc.missiles.add(m);
 		}
 	}
-	
+
 	private void locationDirection() {
-		if (!isLeft && isRight && !isUp && !isDown) {dir = Direction.RIGHT;}
-		else if (isLeft && !isRight && !isUp && !isDown) {dir = Direction.LEFT;}
-		else if (!isLeft && !isRight && isUp && !isDown) {dir = Direction.UP;}
-		else if (!isLeft && !isRight && !isUp && isDown) {dir = Direction.DOWN;}
-		else if (isLeft && !isRight && isUp && !isDown) {dir = Direction.LEFTUP;}
-		else if (!isLeft && isRight && isUp && !isDown) {dir = Direction.RIGHTUP;}
-		else if (isLeft && !isRight && !isUp && isDown) {dir = Direction.LEFTDOWN;}
-		else if (!isLeft && isRight && !isUp && isDown) {dir = Direction.RIGHTDOWN;}
-		else if (!isLeft && !isRight && !isUp && !isDown) {dir = Direction.STOP;}
+		if (!isLeft && isRight && !isUp && !isDown) {
+			dir = Direction.RIGHT;
+		} else if (isLeft && !isRight && !isUp && !isDown) {
+			dir = Direction.LEFT;
+		} else if (!isLeft && !isRight && isUp && !isDown) {
+			dir = Direction.UP;
+		} else if (!isLeft && !isRight && !isUp && isDown) {
+			dir = Direction.DOWN;
+		} else if (isLeft && !isRight && isUp && !isDown) {
+			dir = Direction.LEFTUP;
+		} else if (!isLeft && isRight && isUp && !isDown) {
+			dir = Direction.RIGHTUP;
+		} else if (isLeft && !isRight && !isUp && isDown) {
+			dir = Direction.LEFTDOWN;
+		} else if (!isLeft && isRight && !isUp && isDown) {
+			dir = Direction.RIGHTDOWN;
+		} else if (!isLeft && !isRight && !isUp && !isDown) {
+			dir = Direction.STOP;
+		}
 	}
-	
+
 	public Tank(int x, int y) {
 		this.x = x;
-		this.y = y;	
+		this.y = y;
 	}
-	
+
 	public Tank(int x, int y, boolean isGood) {
 		this.x = x;
 		this.y = y;
@@ -219,28 +235,28 @@ public class Tank {
 		this.dir = dir;
 		this.tc = tc;
 	}
-	
+
 	public Rectangle getRect() {
 		return new Rectangle(x, y, WIDTH, HEIGHT);
 	}
-	
+
 	public void stay() {
 		this.x = oldx;
 		this.y = oldy;
 	}
-	
-	//记录上一个位置如果撞墙后将坦克坐标还原为上一次的位置
-	//如何设置成stop的话，会导致坦克粘到墙上
+
+	// 记录上一个位置如果撞墙后将坦克坐标还原为上一次的位置
+	// 如何设置成stop的话，会导致坦克粘到墙上
 	public void hitWall(Wall w) {
 		if (this.isLive && this.getRect().intersects(w.getRect())) {
 			stay();
 		}
 	}
-	
+
 	public void collidesTanks(List<Tank> tanks) {
-		for (int i=0; i<tanks.size(); i++) {
+		for (int i = 0; i < tanks.size(); i++) {
 			Tank t = tanks.get(i);
-			
+
 			if (t != this && this.isLive && t.isLive() && this.getRect().intersects(t.getRect())) {
 				stay();
 				t.stay();
@@ -248,38 +264,11 @@ public class Tank {
 		}
 
 	}
-	
-	private int step = r.nextInt(TOTALSTEP) + 3;
-	public static final int TOTALSTEP = 20;
-	
-	private static Random r = new Random();
-	
-	//设置坦克方向
-	enum Direction {LEFT, RIGHT, UP, DOWN, LEFTUP, RIGHTUP, LEFTDOWN, RIGHTDOWN, STOP};
-	
-	public static final int XSPEED = 3;
-	public static final int YSPEED = 3;
-	public static final int WIDTH = 40;
-	public static final int HEIGHT = 40;
 
-	private Direction dir =  Direction.STOP;
-	private boolean isLeft = false;
-	private boolean isRight  = false;
-	private boolean isUp  = false;
-	private boolean isDown  = false;
-	int x;
-	int y;
-	int oldx;
-	int oldy;
-	TankClient tc;
-	private Tank.Direction ptdir = Direction.DOWN;
-	private boolean isGood = false;
 	public boolean isGood() {
 		return isGood;
 	}
 
-	private boolean isLive = true;
-	
 	public boolean isLive() {
 		return isLive;
 	}
@@ -287,5 +276,35 @@ public class Tank {
 	public void setLive(boolean isLive) {
 		this.isLive = isLive;
 	}
-	
+
+	private int step = r.nextInt(TOTALSTEP) + 3;
+	public static final int TOTALSTEP = 20;
+
+	private static Random r = new Random();
+
+	// 设置坦克方向
+	enum Direction {
+		LEFT, RIGHT, UP, DOWN, LEFTUP, RIGHTUP, LEFTDOWN, RIGHTDOWN, STOP
+	};
+
+	public static final int XSPEED = 3;
+	public static final int YSPEED = 3;
+	public static final int WIDTH = 40;
+	public static final int HEIGHT = 40;
+
+	private Direction dir = Direction.STOP;
+	private boolean isLeft = false;
+	private boolean isRight = false;
+	private boolean isUp = false;
+	private boolean isDown = false;
+	int x;
+	int y;
+	int oldx;
+	int oldy;
+	TankClient tc;
+	private Tank.Direction ptdir = Direction.DOWN;
+	private boolean isGood = false;
+
+	private boolean isLive = true;
+
 }

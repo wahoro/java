@@ -7,7 +7,6 @@ public class Explode {
 	public Explode(int x, int y, TankClient tc) {
 		this.x = x;
 		this.y = y;
-		this.tc = tc;
 	}
 
 	int x;
@@ -15,7 +14,6 @@ public class Explode {
 	private boolean isLive = true;
 	int[] diameter = {4, 7, 12, 18, 26, 32, 49, 30, 14, 6};
 	int step = 0;
-	private TankClient tc;
 	
 	public void draw(Graphics g) {
 		if (!isLive) return;
